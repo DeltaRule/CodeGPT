@@ -12,6 +12,7 @@ import ee.carlrobert.codegpt.settings.service.codegpt.CodeGPTServiceSettings
 import ee.carlrobert.codegpt.settings.service.custom.CustomServiceSettings
 import ee.carlrobert.codegpt.settings.service.llama.LlamaSettings
 import ee.carlrobert.codegpt.settings.service.llama.LlamaSettingsState
+import ee.carlrobert.codegpt.settings.service.mmsopenai.MMSOpenaiSettings
 import ee.carlrobert.codegpt.settings.service.ollama.OllamaSettings
 import ee.carlrobert.llm.client.codegpt.request.CodeCompletionRequest
 import ee.carlrobert.llm.client.llama.completion.LlamaCompletionRequest
@@ -62,6 +63,34 @@ object CodeCompletionRequestFactory {
             settings.headers,
             settings.body,
             settings.infillTemplate,
+            credential
+        )
+    }
+
+    @JvmStatic
+    fun buildMMSOpenaiRequest(details: InfillRequest): Request {
+        val settings = service<MMSOpenaiSettings>().state
+        val credential = getCredential(CredentialKey.MMS_OPENAI_KEY)
+        val header = mapOf<String,String>(
+            "Authorization" to "Bearer \$CUSTOM_SERVICE_API_KEY",
+            "Content-Type" to "application/json"
+        )
+        val completionModel = settings.completionModel ?: ""
+        val body = mapOf<String,Any>(
+            "suffix" to "\$SUFFIX",
+            "stream" to true,
+            "model" to completionModel,
+            "temperature" to 0.2,
+            "prompt" to "\$PREFIX",
+            "max_tokens" to 24
+        )
+
+        return buildCustomRequest(
+            details,
+            settings.host!! +  "/v1/completions",
+            header,
+            body,
+            settings.fimTemplate,
             credential
         )
     }

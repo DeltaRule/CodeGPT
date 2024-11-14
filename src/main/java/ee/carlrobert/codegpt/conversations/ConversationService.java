@@ -11,6 +11,7 @@ import ee.carlrobert.codegpt.settings.service.azure.AzureSettings;
 import ee.carlrobert.codegpt.settings.service.codegpt.CodeGPTServiceSettings;
 import ee.carlrobert.codegpt.settings.service.google.GoogleSettings;
 import ee.carlrobert.codegpt.settings.service.llama.LlamaSettings;
+import ee.carlrobert.codegpt.settings.service.mmsopenai.MMSOpenaiSettings;
 import ee.carlrobert.codegpt.settings.service.ollama.OllamaSettings;
 import ee.carlrobert.codegpt.settings.service.openai.OpenAISettings;
 import java.time.LocalDateTime;
@@ -207,6 +208,9 @@ public final class ConversationService {
       case OLLAMA -> application.getService(OllamaSettings.class)
           .getState()
           .getModel();
+      case MMS_OPENAI -> application.getService(MMSOpenaiSettings.class)
+              .getState()
+              .getModel();
       case GOOGLE -> application.getService(GoogleSettings.class)
           .getState()
           .getModel();

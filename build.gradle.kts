@@ -65,6 +65,8 @@ dependencies {
   implementation(libs.jsoup)
   implementation(libs.commons.text)
   implementation(libs.jtokkit)
+  implementation("com.squareup.okhttp3:okhttp")
+  implementation("org.json:json:20240303")
   testImplementation(kotlin("test"))
 }
 

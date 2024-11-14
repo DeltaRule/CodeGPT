@@ -44,6 +44,8 @@
           instance="ee.carlrobert.codegpt.settings.service.LlamaServiceConfigurable"/>
         <applicationConfigurable id="settings.codegpt.services.ollama" parentId="settings.codegpt.services" displayName="Ollama (Local)"
           instance="ee.carlrobert.codegpt.settings.service.ollama.OllamaSettingsConfigurable"/>
+        <applicationConfigurable id="settings.codegpt.services.mmsopenai" parentId="settings.codegpt.services" displayName="MMS Openai"
+                                 instance="ee.carlrobert.codegpt.settings.service.mmsopenai.MMSOpenaiSettingsConfigurable"/>
         <applicationConfigurable id="settings.codegpt.personas" parentId="settings.codegpt" displayName="Personas"
           instance="ee.carlrobert.codegpt.settings.persona.PersonasConfigurable"/>
         <applicationConfigurable id="settings.codegpt.dcoumentations" parentId="settings.codegpt" displayName="Documentations"
@@ -66,6 +68,7 @@
         <applicationService serviceImplementation="ee.carlrobert.codegpt.settings.service.you.YouSettings"/>
         <applicationService serviceImplementation="ee.carlrobert.codegpt.settings.service.llama.LlamaSettings"/>
         <applicationService serviceImplementation="ee.carlrobert.codegpt.settings.service.ollama.OllamaSettings"/>
+        <applicationService serviceImplementation="ee.carlrobert.codegpt.settings.service.mmsopenai.MMSOpenaiSettings"/>
         <applicationService serviceImplementation="ee.carlrobert.codegpt.settings.IncludedFilesSettings"/>
         <applicationService serviceImplementation="ee.carlrobert.codegpt.settings.advanced.AdvancedSettings"/>
         <applicationService serviceImplementation="ee.carlrobert.codegpt.conversations.ConversationsState"/>

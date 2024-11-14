@@ -16,6 +16,7 @@ import ee.carlrobert.codegpt.settings.service.ServiceType
 import ee.carlrobert.codegpt.settings.service.codegpt.CodeGPTServiceSettings
 import ee.carlrobert.codegpt.settings.service.custom.CustomServiceSettings
 import ee.carlrobert.codegpt.settings.service.llama.LlamaSettings
+import ee.carlrobert.codegpt.settings.service.mmsopenai.MMSOpenaiSettings
 import ee.carlrobert.codegpt.settings.service.ollama.OllamaSettings
 import ee.carlrobert.codegpt.settings.service.openai.OpenAISettings
 import kotlinx.coroutines.channels.ProducerScope
@@ -95,6 +96,7 @@ class DebouncedCodeCompletionProvider : DebouncedInlineCompletionProvider() {
             ServiceType.CUSTOM_OPENAI -> service<CustomServiceSettings>().state.codeCompletionSettings.codeCompletionsEnabled
             ServiceType.LLAMA_CPP -> LlamaSettings.isCodeCompletionsPossible()
             ServiceType.OLLAMA -> service<OllamaSettings>().state.codeCompletionsEnabled
+            ServiceType.MMS_OPENAI -> service<MMSOpenaiSettings>().state.codeCompletionsEnabled
             ServiceType.ANTHROPIC,
             ServiceType.AZURE,
             ServiceType.GOOGLE,

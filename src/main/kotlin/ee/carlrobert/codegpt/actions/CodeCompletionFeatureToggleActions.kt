@@ -10,6 +10,7 @@ import ee.carlrobert.codegpt.settings.service.ServiceType.*
 import ee.carlrobert.codegpt.settings.service.codegpt.CodeGPTServiceSettings
 import ee.carlrobert.codegpt.settings.service.custom.CustomServiceSettings
 import ee.carlrobert.codegpt.settings.service.llama.LlamaSettings
+import ee.carlrobert.codegpt.settings.service.mmsopenai.MMSOpenaiSettings
 import ee.carlrobert.codegpt.settings.service.ollama.OllamaSettings
 import ee.carlrobert.codegpt.settings.service.openai.OpenAISettings
 
@@ -25,6 +26,8 @@ abstract class CodeCompletionFeatureToggleActions(
         LLAMA_CPP -> LlamaSettings.getCurrentState()::setCodeCompletionsEnabled
 
         OLLAMA -> service<OllamaSettings>().state::codeCompletionsEnabled::set
+
+        MMS_OPENAI -> service<MMSOpenaiSettings>().state::codeCompletionsEnabled::set
 
         CUSTOM_OPENAI -> service<CustomServiceSettings>().state.codeCompletionSettings::codeCompletionsEnabled::set
 
@@ -44,6 +47,7 @@ abstract class CodeCompletionFeatureToggleActions(
             OPENAI,
             CUSTOM_OPENAI,
             LLAMA_CPP,
+            MMS_OPENAI,
             OLLAMA -> true
 
             ANTHROPIC,

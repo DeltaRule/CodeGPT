@@ -14,6 +14,7 @@ import ee.carlrobert.codegpt.settings.service.codegpt.CodeGPTServiceConfigurable
 import ee.carlrobert.codegpt.settings.service.codegpt.CodeGPTServiceForm
 import ee.carlrobert.codegpt.settings.service.custom.CustomServiceConfigurable
 import ee.carlrobert.codegpt.settings.service.google.GoogleSettingsConfigurable
+import ee.carlrobert.codegpt.settings.service.mmsopenai.MMSOpenaiSettingsConfigurable
 import ee.carlrobert.codegpt.settings.service.ollama.OllamaSettingsConfigurable
 import javax.swing.JPanel
 
@@ -60,6 +61,7 @@ class ServiceConfigurableComponent {
             "Google" to GoogleSettingsConfigurable::class.java,
             "LLaMA C/C++ (Local)" to LlamaServiceConfigurable::class.java,
             "Ollama (Local)" to OllamaSettingsConfigurable::class.java,
+            "MMS Openai" to MMSOpenaiSettingsConfigurable::class.java,
         ).entries.forEach { (name, configurableClass) ->
             formBuilder.addComponent(ActionLink(name) {
                 val context = service<DataManager>().getDataContext(it.source as ActionLink)

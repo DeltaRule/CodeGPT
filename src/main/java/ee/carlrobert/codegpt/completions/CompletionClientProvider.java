@@ -8,6 +8,7 @@ import ee.carlrobert.codegpt.settings.advanced.AdvancedSettings;
 import ee.carlrobert.codegpt.settings.service.anthropic.AnthropicSettings;
 import ee.carlrobert.codegpt.settings.service.azure.AzureSettings;
 import ee.carlrobert.codegpt.settings.service.llama.LlamaSettings;
+import ee.carlrobert.codegpt.settings.service.mmsopenai.MMSOpenaiSettings;
 import ee.carlrobert.codegpt.settings.service.ollama.OllamaSettings;
 import ee.carlrobert.codegpt.settings.service.openai.OpenAISettings;
 import ee.carlrobert.llm.client.anthropic.ClaudeClient;
@@ -88,6 +89,43 @@ public class CompletionClientProvider {
     }
     return builder.build(getDefaultClientBuilder());
   }
+
+  public static OpenAIClient getMMSOpenaiClient() {
+    var host = ApplicationManager.getApplication()
+            .getService(MMSOpenaiSettings.class)
+            .getState()
+            .getHost();
+    return new OpenAIClient.Builder(getCredential(CredentialKey.MMS_OPENAI_KEY))
+            .setHost(host)
+            .build(getDefaultClientBuilder());
+  }
+
+  public static OkHttpClient.Builder getMMSOpenaiCompletionClient() {
+    OkHttpClient.Builder builder = new OkHttpClient.Builder();
+    var advancedSettings = AdvancedSettings.getCurrentState();
+    var proxyHost = advancedSettings.getProxyHost();
+    var proxyPort = advancedSettings.getProxyPort();
+    if (!proxyHost.isEmpty() && proxyPort != 0) {
+      builder.proxy(
+              new Proxy(advancedSettings.getProxyType(), new InetSocketAddress(proxyHost, proxyPort)));
+      if (advancedSettings.isProxyAuthSelected()) {
+        builder.proxyAuthenticator((route, response) ->
+                response.request()
+                        .newBuilder()
+                        .header("Proxy-Authorization", Credentials.basic(
+                                advancedSettings.getProxyUsername(),
+                                advancedSettings.getProxyPassword()))
+                        .build());
+      }
+    }
+
+    return builder
+            .connectTimeout(advancedSettings.getConnectTimeout(), TimeUnit.SECONDS)
+            .readTimeout(advancedSettings.getReadTimeout(), TimeUnit.SECONDS);
+  }
+
+
+
 
   public static GoogleClient getGoogleClient() {
     return new GoogleClient.Builder(getCredential(CredentialKey.GOOGLE_API_KEY))

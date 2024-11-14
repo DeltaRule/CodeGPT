@@ -23,6 +23,7 @@ interface CompletionRequestFactory {
                 ServiceType.ANTHROPIC -> ClaudeRequestFactory()
                 ServiceType.GOOGLE -> GoogleRequestFactory()
                 ServiceType.OLLAMA -> OllamaRequestFactory()
+                ServiceType.MMS_OPENAI -> MMSOpenaiRequestFactory()
                 ServiceType.LLAMA_CPP -> LlamaRequestFactory()
             }
         }

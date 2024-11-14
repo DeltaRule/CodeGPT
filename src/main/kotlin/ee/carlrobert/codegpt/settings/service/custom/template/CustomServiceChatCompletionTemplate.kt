@@ -85,6 +85,11 @@ enum class CustomServiceChatCompletionTemplate(
         getDefaultHeaders(),
         getDefaultBodyParams(mapOf("model" to "codellama"))
     ),
+    MMS_OPENAI(
+        "http://blabla:11434/v1/chat/completions",
+        getDefaultHeaders(),
+        getDefaultBodyParams(mapOf("model" to "codellama"))
+    ),
     LLAMA_CPP(
         "http://localhost:8080/v1/chat/completions",
         getDefaultHeaders(),

@@ -54,9 +54,15 @@ enum class CustomServiceTemplate(
     ),
     OLLAMA(
         "Ollama",
-        "https://github.com/ollama/ollama/blob/main/docs/openai.md",
+        "https://platform.openai.com/docs/api-reference/chat",
         CustomServiceChatCompletionTemplate.OLLAMA
     ),
+    MMS_OPENAI(
+        "MMS Openai",
+        "https://github.com/ollama/ollama/blob/main/docs/openai.md",
+        CustomServiceChatCompletionTemplate.MMS_OPENAI
+    ),
+
     LLAMA_CPP(
         "LLaMA C/C++",
         "https://github.com/ggerganov/llama.cpp/blob/master/examples/server/README.md",

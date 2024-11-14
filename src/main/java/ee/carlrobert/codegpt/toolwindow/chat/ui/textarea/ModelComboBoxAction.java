@@ -1,13 +1,6 @@
 package ee.carlrobert.codegpt.toolwindow.chat.ui.textarea;
 
-import static ee.carlrobert.codegpt.settings.service.ServiceType.ANTHROPIC;
-import static ee.carlrobert.codegpt.settings.service.ServiceType.AZURE;
-import static ee.carlrobert.codegpt.settings.service.ServiceType.CODEGPT;
-import static ee.carlrobert.codegpt.settings.service.ServiceType.CUSTOM_OPENAI;
-import static ee.carlrobert.codegpt.settings.service.ServiceType.GOOGLE;
-import static ee.carlrobert.codegpt.settings.service.ServiceType.LLAMA_CPP;
-import static ee.carlrobert.codegpt.settings.service.ServiceType.OLLAMA;
-import static ee.carlrobert.codegpt.settings.service.ServiceType.OPENAI;
+import static ee.carlrobert.codegpt.settings.service.ServiceType.*;
 import static java.lang.String.format;
 
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
@@ -34,6 +27,7 @@ import ee.carlrobert.codegpt.settings.service.codegpt.CodeGPTServiceSettings;
 import ee.carlrobert.codegpt.settings.service.custom.CustomServiceSettings;
 import ee.carlrobert.codegpt.settings.service.google.GoogleSettings;
 import ee.carlrobert.codegpt.settings.service.llama.LlamaSettings;
+import ee.carlrobert.codegpt.settings.service.mmsopenai.MMSOpenaiSettings;
 import ee.carlrobert.codegpt.settings.service.ollama.OllamaSettings;
 import ee.carlrobert.codegpt.settings.service.openai.OpenAISettings;
 import ee.carlrobert.llm.client.google.models.GoogleModel;
@@ -180,6 +174,18 @@ public class ModelComboBoxAction extends ComboBoxAction {
       actionGroup.add(ollamaGroup);
     }
 
+    if (availableProviders.contains(MMS_OPENAI)) {
+      var mmsOpenaiGroup = DefaultActionGroup.createPopupGroup(() -> "MMS Openai");
+      mmsOpenaiGroup.getTemplatePresentation().setIcon(Icons.Ollama);
+      ApplicationManager.getApplication()
+              .getService(MMSOpenaiSettings.class)
+              .getState()
+              .getAvailableModels()
+              .forEach(model ->
+                      mmsOpenaiGroup.add(createMMSOpenaiModelAction(model, presentation)));
+      actionGroup.add(mmsOpenaiGroup);
+    }
+
     return actionGroup;
   }
 
@@ -233,6 +239,12 @@ public class ModelComboBoxAction extends ComboBoxAction {
         templatePresentation.setText(application.getService(OllamaSettings.class)
             .getState()
             .getModel());
+        break;
+      case MMS_OPENAI:
+        templatePresentation.setIcon(Icons.Ollama);
+        templatePresentation.setText(application.getService(MMSOpenaiSettings.class)
+                .getState()
+                .getModel());
         break;
       case GOOGLE:
         templatePresentation.setText("Google (Gemini)");
@@ -323,6 +335,14 @@ public class ModelComboBoxAction extends ComboBoxAction {
             .getService(OllamaSettings.class)
             .getState()
             .setModel(model));
+  }
+
+  private AnAction createMMSOpenaiModelAction(String model, Presentation comboBoxPresentation) {
+    return createModelAction(MMS_OPENAI, model, Icons.Ollama, comboBoxPresentation,
+            () -> ApplicationManager.getApplication()
+                    .getService(MMSOpenaiSettings.class)
+                    .getState()
+                    .setModel(model));
   }
 
   private AnAction createOpenAIModelAction(

@@ -7,6 +7,7 @@ import ee.carlrobert.codegpt.codecompletions.CodeCompletionRequestFactory.buildC
 import ee.carlrobert.codegpt.codecompletions.CodeCompletionRequestFactory.buildLlamaRequest
 import ee.carlrobert.codegpt.codecompletions.CodeCompletionRequestFactory.buildOllamaRequest
 import ee.carlrobert.codegpt.codecompletions.CodeCompletionRequestFactory.buildOpenAIRequest
+import ee.carlrobert.codegpt.codecompletions.CodeCompletionRequestFactory.buildMMSOpenaiRequest
 import ee.carlrobert.codegpt.completions.CompletionClientProvider
 import ee.carlrobert.codegpt.completions.llama.LlamaModel
 import ee.carlrobert.codegpt.settings.GeneralSettings
@@ -15,6 +16,7 @@ import ee.carlrobert.codegpt.settings.service.ServiceType.*
 import ee.carlrobert.codegpt.settings.service.codegpt.CodeGPTServiceSettings
 import ee.carlrobert.codegpt.settings.service.custom.CustomServiceSettings
 import ee.carlrobert.codegpt.settings.service.llama.LlamaSettings
+import ee.carlrobert.codegpt.settings.service.mmsopenai.MMSOpenaiSettings
 import ee.carlrobert.codegpt.settings.service.ollama.OllamaSettings
 import ee.carlrobert.codegpt.settings.service.openai.OpenAISettings
 import ee.carlrobert.llm.client.openai.completion.OpenAIChatCompletionEventSourceListener
@@ -29,6 +31,7 @@ class CodeCompletionService {
     // TODO: Consolidate logic in ModelComboBoxAction
     fun getSelectedModelCode(): String? {
         return when (service<GeneralSettings>().state.selectedService) {
+            MMS_OPENAI -> service<MMSOpenaiSettings>().state.completionModel
             CODEGPT -> service<CodeGPTServiceSettings>().state.codeCompletionSettings.model
             OPENAI -> "gpt-3.5-turbo-instruct"
             CUSTOM_OPENAI -> service<CustomServiceSettings>().state
@@ -49,6 +52,7 @@ class CodeCompletionService {
             CUSTOM_OPENAI -> service<CustomServiceSettings>().state.codeCompletionSettings.codeCompletionsEnabled
             LLAMA_CPP -> LlamaSettings.isCodeCompletionsPossible()
             OLLAMA -> service<OllamaSettings>().state.codeCompletionsEnabled
+            MMS_OPENAI -> service<MMSOpenaiSettings>().state.codeCompletionsEnabled
             else -> false
         }
 
@@ -76,7 +80,13 @@ class CodeCompletionService {
 
             OLLAMA -> CompletionClientProvider.getOllamaClient()
                 .getCompletionAsync(buildOllamaRequest(requestDetails), eventListener)
+            MMS_OPENAI ->createFactory(
+                CompletionClientProvider.getMMSOpenaiCompletionClient().build()
+            ).newEventSource(
+                buildMMSOpenaiRequest(requestDetails),
+                OpenAITextCompletionEventSourceListener(eventListener)
 
+            )
             LLAMA_CPP -> CompletionClientProvider.getLlamaClient()
                 .getChatCompletionAsync(buildLlamaRequest(requestDetails), eventListener)
 

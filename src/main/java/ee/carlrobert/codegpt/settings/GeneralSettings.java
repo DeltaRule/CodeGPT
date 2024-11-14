@@ -16,12 +16,13 @@ import ee.carlrobert.codegpt.settings.service.codegpt.CodeGPTService;
 import ee.carlrobert.codegpt.settings.service.codegpt.CodeGPTServiceSettings;
 import ee.carlrobert.codegpt.settings.service.google.GoogleSettings;
 import ee.carlrobert.codegpt.settings.service.llama.LlamaSettings;
+import ee.carlrobert.codegpt.settings.service.mmsopenai.MMSOpenaiSettings;
 import ee.carlrobert.codegpt.settings.service.ollama.OllamaSettings;
 import ee.carlrobert.codegpt.settings.service.openai.OpenAISettings;
 import ee.carlrobert.codegpt.util.ApplicationUtil;
 import org.jetbrains.annotations.NotNull;
 
-@State(name = "CodeGPT_GeneralSettings_270", storages = @Storage("CodeGPT_GeneralSettings_270.xml"))
+@State(name = "CodeGPT_GeneralSettings_271", storages = @Storage("CodeGPT_GeneralSettings_271.xml"))
 public class GeneralSettings implements PersistentStateComponent<GeneralSettingsState> {
 
   private GeneralSettingsState state = new GeneralSettingsState();
@@ -92,6 +93,10 @@ public class GeneralSettings implements PersistentStateComponent<GeneralSettings
         ApplicationManager.getApplication().getService(OllamaSettings.class).getState()
             .setModel(conversation.getModel());
         break;
+      case MMS_OPENAI:
+        ApplicationManager.getApplication().getService(MMSOpenaiSettings.class).getState()
+                .setModel(conversation.getModel());
+        break;
       default:
         break;
     }
@@ -139,6 +144,11 @@ public class GeneralSettings implements PersistentStateComponent<GeneralSettings
             .getService(OllamaSettings.class)
             .getState()
             .getModel();
+      case MMS_OPENAI:
+        return ApplicationManager.getApplication()
+                .getService(MMSOpenaiSettings.class)
+                .getState()
+                .getModel();
       case GOOGLE:
         return ApplicationManager.getApplication()
             .getService(GoogleSettings.class)

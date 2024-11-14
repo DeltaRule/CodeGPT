@@ -111,6 +111,7 @@ public final class CompletionRequestService {
             .getChatCompletionAsync(completionRequest, eventListener);
         case OLLAMA -> CompletionClientProvider.getOllamaClient()
             .getChatCompletionAsync(completionRequest, eventListener);
+        case MMS_OPENAI -> CompletionClientProvider.getMMSOpenaiClient().getChatCompletionAsync(completionRequest, eventListener);
         default -> throw new RuntimeException("Unknown service selected");
       };
     }
@@ -187,6 +188,7 @@ public final class CompletionRequestService {
             .getChatCompletion(completionRequest);
         case OLLAMA -> CompletionClientProvider.getOllamaClient()
             .getChatCompletion(completionRequest);
+        case MMS_OPENAI -> CompletionClientProvider.getMMSOpenaiClient().getChatCompletion(completionRequest);
         default -> throw new RuntimeException("Unknown service selected");
       };
       return tryExtractContent(response).orElseThrow();
@@ -245,7 +247,7 @@ public final class CompletionRequestService {
               : CredentialKey.AZURE_ACTIVE_DIRECTORY_TOKEN);
       case ANTHROPIC -> CredentialsStore.INSTANCE.isCredentialSet(CredentialKey.ANTHROPIC_API_KEY);
       case GOOGLE -> CredentialsStore.INSTANCE.isCredentialSet(CredentialKey.GOOGLE_API_KEY);
-      case CODEGPT, CUSTOM_OPENAI, LLAMA_CPP, OLLAMA -> true;
+      case CODEGPT, CUSTOM_OPENAI, LLAMA_CPP, OLLAMA, MMS_OPENAI -> true;
     };
   }
 
